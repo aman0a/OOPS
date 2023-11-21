@@ -1,115 +1,72 @@
-#include<iostream>
-using namespace std;
-template<class T>
-class vector
-{
-    T v[20];
-    int size;
-   
-    public:
-        void create();
-        void modify();
-        void mult();
-        void display();
+#include <iostream>
+
+template <typename T, size_t N>
+class Vector {
+private:
+    T elements[N];
+
+public:
+    void set(const T (&elems)[N]) {
+        for (size_t i = 0; i < N; ++i) {
+            elements[i] = elems[i];
+        }
+    }
+
+    void modify(size_t index, const T& value) {
+        if (index < N) {
+            elements[index] = value;
+        } else {
+            std::cout << "Index out of range." << std::endl;
+        }
+    }
+
+    void scale(const T& factor) {
+        for (size_t i = 0; i < N; ++i) {
+            elements[i] *= factor;
+        }
+    }
+
+    void display() const {
+        std::cout << "(";
+        for (size_t i = 0; i < N; ++i) {
+            std::cout << elements[i];
+            if (i != N - 1) {
+                std::cout << ", ";
+            }
+        }
+        std::cout << ")" << std::endl;
+    }
+
+    void inputValues() {
+        std::cout << "Enter " << N << " values for the vector:\n";
+        for (size_t i = 0; i < N; ++i) {
+            std::cout << "Value " << i + 1 << ": ";
+            std::cin >> elements[i];
+        }
+    }
 };
 
-template<class T>
-void vector<T>::create()
-{
-    int i;
-    T value;
-    char ans;
-    size=0;
-    do{
-        cout<<"\nEnter the index & value:";
-        cin>>i>>value;
-        v[i]=value;
-        size++;
-        cout<<"\nDo you want more elements?";
-        cin>>ans;
-    }while(ans=='y'||ans=='Y');
-}
+int main() {
+    Vector<int, 3> intVector;
+    intVector.inputValues();
+    intVector.display();
 
-template<class T>
-void vector<T>::modify()
-{
-    int key;
-    T newval;
-    cout<<"\nEnter index for modificaion:";
-    cin>>key;
-    cout<<"\nEnter new value:";
-    cin>>newval;
-    v[key]=newval;
-}
+    int index, value;
+    std::cout << "Enter index to modify (0-" << 3 - 1 << "): ";
+    std::cin >> index;
+    std::cout << "Enter value to set: ";
+    std::cin >> value;
 
-template<class T>
-void vector<T>::mult()
-{
-    int i;
-    int scalarval;
-    cout<<"\nEnter scalar value for multiplication";
-    cin>>scalarval;
-    for(i=0;i<size;i++)
-    v[i]=v[i]*scalarval;
-}
+    intVector.modify(index, value);
+    intVector.display();
 
-template<class T>
-void vector<T>::display()
-{
-    int i;
-   
-    cout<<"\nSize of vector is:"<<size;
-    cout<<"\nElements in vector are:";
-    cout<<"(";
-    for(i=0;i<size;i++)
-    {
-        cout<<v[i]<<" ";
-    }
-    cout<<")";
-}
+    int scalar;
+    std::cout << "Enter scalar value to scale: ";
+    std::cin >> scalar;
 
-int main()
-{
-    int ch;
-    vector<int>obj;
-    cout<<"\nProgram for template class";
-    do
-    {
-        cout<<"\nMAIN MENU";
-        cout<<"\n1.Create";
-        cout<<"\n2.Display";
-        cout<<"\n3.Mult";
-        cout<<"\n4.Modify";
-        cout<<"\n0.Exit";
-        cout<<"\nEnter your choice:";
-        cin>>ch;
-       
-        switch(ch)
-        {
-            case 1:
-                obj.create();
-                break;
-               
-            case 2:
-                obj.display();
-                break;
-               
-            case 3:
-                obj.mult();
-                break;
-               
-            case 4:
-                obj.modify();
-                break;
-               
-            case 0:
-                cout<<"\nExit\n";
-                break;
-               
-            default:
-                cout<<"\nInvalid choice";
-                break;
-        }
-    }while(ch!=0);
+    intVector.scale(scalar);
+    intVector.display();
+
     return 0;
 }
+
